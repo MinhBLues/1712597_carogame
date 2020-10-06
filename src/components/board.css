@@ -1,0 +1,33 @@
+.board-row:after {
+  clear: both;
+  content: "";
+  display: table;
+}
+
+.status {
+  margin-bottom: 10px;
+}
+
+.kbd-navigation .square:focus {
+  background: #ddd;
+}
+
+.game {
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+}
+
+.game-info {
+  margin-left: 20px;
+}
+
+.playagain {
+  background: rgb(86, 184, 197);
+  border: 1px solid orange;
+  border-radius: 5px;
+  font-size: 20px;
+  height: 50px;
+  width: 150px;
+  font-family:"arial";
+}
