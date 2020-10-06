@@ -6,6 +6,11 @@
 
 .status {
   margin-bottom: 10px;
+  font-size:20px;
+  font-family:'arial';
+  margin-top:10px;
+  font-weight: normal;
+  color: orange;
 }
 
 .kbd-navigation .square:focus {
