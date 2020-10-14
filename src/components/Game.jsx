@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 import Board from "./Board";
 import './game.css';
-
-
 export default class Game extends Component {
     constructor(props) {
         super(props);
@@ -11,6 +9,7 @@ export default class Game extends Component {
             xIsNext: true,
             stepNumber: 0,
             historyIndex: [{ index: null }],
+            sort: false,
         };
     }
     playAgain = () => {
@@ -52,20 +51,22 @@ export default class Game extends Component {
         const current = history[this.state.stepNumber];
         const winner = calculateWinner(current.squares);
 
-        const moves = history.map((step, move) => {
+        var moves = history.map((step, move) => {
             const index = this.state.historyIndex[move].index;
             const desc = move ?
-                'Go to move #' + move + ` (${Math.floor(index/3)}:${index%3})` :
+                'Go to move #' + move + ` (${Math.floor(index / 3) + 1}:${index % 3 + 1})` :
                 'Go to game start';
             return (
-                <li>
-                    <button className="move" onClick={() => this.jumpTo(move)}>{desc}</button>
+                <li key={move}>
+                    <button id={move} className="move mt-2" onClick={() => this.jumpTo(move)}>{desc}</button>
                 </li>
             );
         });
+        moves = this.state.sort ? moves.reverse() : moves;
+
         let status;
         if (winner) {
-            status = 'Winner: ' + winner;
+            status = winner && winner.name ? 'Winner: ' + winner.name : winner;
         } else {
             status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
         }
@@ -75,19 +76,20 @@ export default class Game extends Component {
                     <div className="game-board">
                         <div className="status">{status}</div>
                         <div>
-                            <Board squares={current.squares} onClick={(i) => this.handleClick(i)} />
+                            <Board squares={current.squares} indexs={winner ? winner.indexs : null} onClick={(i) => this.handleClick(i)} />
                             <button className="playagain mt-3" onClick={this.playAgain}> Play Again</button>
                         </div>
                     </div>
                     <div className="game-info">
-                        <ol>{moves}</ol>
+                        <button id="sort" className="btn btn-info ml-5 mt-5" onClick={() => this.setState({ sort: !this.state.sort })}> Sort</button>
+                        <ul id='move-list'>{moves}</ul>
                     </div>
                 </div>
-
             </div>
         )
     }
 }
+
 function calculateWinner(squares) {
     const lines = [
         [0, 1, 2],
@@ -103,7 +105,10 @@ function calculateWinner(squares) {
     for (let i = 0; i < lines.length; i++) {
         const [a, b, c] = lines[i];
         if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-            return squares[a];
+            return {
+                name: squares[a],
+                indexs: [a, b, c]
+            };
         }
     }
     var j = 0;
