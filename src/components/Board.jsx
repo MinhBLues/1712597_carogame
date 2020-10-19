@@ -1,33 +1,29 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import './board.css';
 import Square from './Square';
+export default function Board(props) {
 
-export default class Board extends Component {
-    renderSquares = numbs => {
-
+    const renderSquares = numbs => {
         return numbs.map(num => (
             <Square
                 key={num}
-                index={this.props.indexs != null && this.props.indexs.includes(num) ? num : null}
-                value={this.props.squares[num]}
-                onClick={() => this.props.onClick(num)} />
+                index={props.indexs != null && props.indexs.includes(num) ? num : null}
+                value={props.squares[num]}
+                onClick={() => props.onClick(num)} />
         ))
     }
-
-    render() {
-        const getBoard = nums => {
-            let content = [];
-            for (let i = 0; i < nums; i++) {
-                content.push(<div key={i} className="board-row"> {this.renderSquares([i * 3, i * 3 + 1, i * 3 + 2])} </div>);
-            }
-            return content;
-        };
-        return (
-            <div>
-                {getBoard(3)}
-            </div>
-        );
-    }
+    const getBoard = nums => {
+        let content = [];
+        for (let i = 0; i < nums; i++) {
+            content.push(<div key={i} className="board-row"> {renderSquares([i * 3, i * 3 + 1, i * 3 + 2])} </div>);
+        }
+        return content;
+    };
+    return (
+        <div>
+            {getBoard(3)}
+        </div>
+    );
 }
 
 
